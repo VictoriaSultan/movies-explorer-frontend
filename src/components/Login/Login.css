@@ -1,5 +1,6 @@
 .login {
     background-color: #202020;
+    height: 100vh;
 }
 
 .login__container {
@@ -105,5 +106,11 @@
     .login__signup-link {
         font-size: 12px;
         line-height: 15px;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .login__title {
+        text-align: center;
     }
 }

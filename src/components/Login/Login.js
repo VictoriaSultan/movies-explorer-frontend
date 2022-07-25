@@ -22,7 +22,7 @@ const Login = (props) => {
   };
 
   return (
-    <div className="login">
+    <section className="login">
         <div className="login__container">
             <Logo />
             <h2 className="login__title">Рады видеть!</h2>
@@ -36,7 +36,7 @@ const Login = (props) => {
                 </div>
             </form>
         </div>
-    </div>
+    </section>
   )
 };
 

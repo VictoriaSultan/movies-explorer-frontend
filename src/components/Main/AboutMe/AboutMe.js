@@ -16,10 +16,10 @@ const AboutMe = () => {
           </p>
           <ul className="about-me__links">
             <li>
-              <a href="https://github.com/VictoriaSultan" className="about-me__link">Telegram</a>
+              <a href="https://github.com/VictoriaSultan" className="about-me__link" target="_blank" rel="noreferrer">Telegram</a>
             </li>
             <li>
-              <a href="https://github.com/VictoriaSultan" className="about-me__link">GitHub</a>
+              <a href="https://github.com/VictoriaSultan" className="about-me__link" target="_blank" rel="noreferrer">GitHub</a>
             </li>
           </ul>
         </div>

@@ -4,3 +4,10 @@
     object-fit: cover;
     object-position: center;
   }
+
+  @media screen and (max-width: 320px) {
+    .logo {
+      margin: 0 auto;
+      display: block;
+    }
+}

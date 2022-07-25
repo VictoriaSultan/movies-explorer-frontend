@@ -6,12 +6,12 @@ import './Movies.css';
 
 function Movies() {
   return (
-    <div className="movies">
+    <section className="movies">
       <SearchForm />
       <MoviesCardList
         cards={cards}
         buttonMore={true} />
-    </div>
+    </section>
   );
 }
 

@@ -9,6 +9,7 @@
     justify-content: center;
     justify-items: center;
     grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 20px 38px;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -49,7 +50,7 @@
 
     .cards__list {
       grid-template-columns: repeat(auto-fit, minmax(339px, 1fr));
-      gap: 0 30px;
+      gap: 30px 30px;
     }    
   }
 

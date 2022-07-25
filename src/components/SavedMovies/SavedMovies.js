@@ -5,12 +5,12 @@ import './SavedMovies.css';
 
 const SavedMovies = () => {
   return (
-    <div className="saved-movies">
+    <section className="saved-movies">
       <SearchForm />
       <MoviesCardList
         cards={savedMovies}
         buttonMore={false} />
-    </div>
+    </section>
   );
 };
 
