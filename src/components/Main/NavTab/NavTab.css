@@ -1,0 +1,40 @@
+.nav-tab {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: nowrap;
+  margin: 17px 14px;
+  }
+  
+  .nav-tab__nav-link {
+    font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+    font-weight: 500;
+    font-size: 10px;
+    line-height: 16px;
+    text-decoration: none;
+    text-align: center;
+    color: #fff;
+    background-color: #303030;
+    border-radius: 6px;
+    width: 96px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px;
+  }
+  
+  .nav-tab__nav-link:hover {
+    opacity: .6;
+    cursor: pointer;
+    transition: opacity .25s ease-in;
+  }
+ 
+
+  @media screen and (max-width: 400px) {
+    .nav-tab__nav-link {
+      width: 82px;
+      height: 26px;
+      margin: 6px;
+    }
+  }
