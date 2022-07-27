@@ -1,0 +1,115 @@
+.register {
+    background-color: #202020;
+}
+
+.register__container {
+    width: 396px;
+    padding-top: 60px;
+    margin: 0 auto;
+}
+
+.register__form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+}
+
+.register__textinput {
+    width: 396px;
+    height: 17px;
+    border: none;
+    border-bottom: 2px solid #424242;
+    background-color: #202020;
+    color: #cccccc;
+    font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    margin-top: 30px;
+    padding-bottom: 13px;
+}
+
+.register__textinput:-webkit-autofill {
+    -webkit-box-shadow: inset 0 0 0 50px #202020; /* цвет вашего фона */
+    -webkit-text-fill-color: #cccccc; /* цвет текста */
+}
+
+.register__title {
+    margin: 40px 0 30px auto;
+    font-family: "Inter", Arial, Helvetica, sans-serif;
+    font-style: normal;
+    font-weight: 900;
+    font-size: 24px;
+    line-height: 29px;
+    color: #FFFFFF;
+}
+
+.register__button {
+    width: 396px;
+    height: 45px;
+    background-color: #4285F4;
+    border: none;
+    border-radius: 2px;
+    color: white;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    margin-top: 134px;
+    outline: none;
+    text-align: center;
+}
+
+.register__signup {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.register__signup-title {
+    margin: 16px 6px 80px 0;
+    font-size: 14px;
+    line-height: 17px;
+    text-align: center;
+    color: #8B8B8B;
+}
+
+.register__signup-link {
+    margin: 16px 6px 80px 0;
+    font-size: 14px;
+    line-height: 17px;
+    text-align: center;
+    color: #4285F4;
+    text-decoration: none;
+}
+
+@media screen and (max-width: 767px) {
+    .register__container {
+        width: 260px;
+    }
+
+    .register__textinput {
+        width: 260px;
+    }
+
+    .register__button {
+        width: 260px;
+    }    
+
+    .register__signup-title {
+        font-size: 12px;
+        line-height: 15px;
+    }
+
+    .register__signup-link {
+        font-size: 12px;
+        line-height: 15px;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .register__title {
+        text-align: center;
+    }
+}
