@@ -10,14 +10,21 @@ const MoviesCard = (props) => {
         setFavorite(!favorite);
     }
 
+    const hours = Math.floor(card.duration / 60);          
+    const minutes = card.duration % 60;
+
+    const imageUrl = 'https://api.nomoreparties.co' + card.image.url;
+
     const { pathname } = useLocation();
 
     return (
         <div className="card">
             <div className="card__element">
-                <img className="card__image" src={card.image} alt={card.title}></img>
+                <a href={card.trailerLink} target="_blank" rel="noreferrer">
+                    <img className="card__image" src={imageUrl} alt={card.nameRU}></img>
+                </a>
                 <div className="card__container">
-                    <h2 className="card__title">{card.title}</h2>
+                    <h2 className="card__title">{card.nameRU}</h2>
                     <div className="card__like">
                         {pathname === '/saved-movies' ? (
                         <button type="button" className="card__like_delete" />
@@ -26,7 +33,7 @@ const MoviesCard = (props) => {
                         )}
                     </div>
                 </div>
-                <p className="card__time">{card.duration}</p>
+                <p className="card__time">{hours}ч {minutes}м</p>
             </div>
         </div>
     )

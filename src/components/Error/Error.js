@@ -1,14 +1,7 @@
 import React from "react";
 import "./Error.css";
-/*
-import { useHistory } from "react-router-dom";
-*/
 
 function Error({ status = 404, message = "Страница не найдена" }) {
-
-  /*
-  const history = useHistory();
-  */
 
   return (
     <section className="error">
@@ -22,9 +15,3 @@ function Error({ status = 404, message = "Страница не найдена" 
 }
 
 export default Error;
-
-
-      /*
-      onClick={history.goBack}
-
-      */
