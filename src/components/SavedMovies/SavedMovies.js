@@ -8,8 +8,7 @@ const SavedMovies = () => {
     <section className="saved-movies">
       <SearchForm />
       <MoviesCardList
-        cards={savedMovies}
-        buttonMore={false} />
+        cards={savedMovies} />
     </section>
   );
 };
