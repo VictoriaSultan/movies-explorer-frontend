@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Route, Switch, useHistory, useLocation } from "react-router-dom";
+import { Route, Switch, useLocation } from "react-router-dom";
 
-import { CurrentUserProvider } from "../../contexts/CurrentUser";
+import { useCurrentUser } from "../../contexts/CurrentUser";
 import "./App.css";
 
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
@@ -21,19 +21,49 @@ import Preloader from "../Preloader/Preloader";
 
 import { register, authorize, checkToken } from "../../utils/Auth";
 import { pagesConfig } from "../../utils/Constants";
+import { api as mainApi } from "../../utils/MainApi";
 import moviesApi from "../../utils/MoviesApi";
 
 function App() {
-  const history = useHistory();
+  
   const { pathname } = useLocation();
-  const [isLoading, setLoading] = useState(true);
+  const { changeCurrentUser, user } = useCurrentUser();
 
+  const [isLoading, setLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [filters, setFilters] = useState({});
   const [movies, setMovies] = useState([]);
+  const [savedMoviesData, setSavedMoviesData] = useState([]);
+  const [favoriteMoviesIndex, setFavoriteMoviesIndex] = useState([]);
 
   useEffect(() => {
+    if (user._id !== "") {
+      const favoriteIndexList = savedMoviesData
+        .filter((v) => v.owner === user._id)
+        .map(({ movieId }) => movieId);
+      const unique = favoriteIndexList.filter((v, i, a) => a.indexOf(v) === i);
+      setFavoriteMoviesIndex(unique.sort());
+    }
+  }, [savedMoviesData, movies, user]);
+
+  useEffect(() => {
+    const jwt = localStorage.getItem("jwt");
     const localMovies = localStorage.getItem("movies");
+    if (jwt) {
+      setLoading(true);
+      checkToken()
+        .then((userData) => {
+          setIsLoggedIn(true);
+          changeCurrentUser(userData);
+          getSavedMovies();
+          setLoading(false);
+        })
+        .catch((err) => {
+
+        });
+    } else {
+    }
+
     if (localMovies) {
       try {
         const parseMovies = JSON.parse(localMovies);
@@ -48,34 +78,37 @@ function App() {
     } else {
       fetchMovies();
     }
-  }, []);
+  }, [changeCurrentUser]);
 
   useEffect(() => {
-    if (isLoggedIn) {
-      checkToken()
-        .then((userData) => {
-          // setCurrentUser(userData);
-          // console.log(userData);
-        })
-        .catch((err) => {
-          // console.log(err);
-        });
+    if (movies) {
+      setLoading(false);
     }
-  }, [isLoggedIn]);
+  }, [movies]);
+
+  const getSavedMovies = () => {
+    return mainApi.getInitialCards().then((dataList) => {
+      // console.log("getSavedMovies", dataList);
+      setSavedMoviesData(dataList);
+      return dataList;
+    });
+  };
+
+  const getSavedMovieStatus = (id) => {
+    return favoriteMoviesIndex.includes(id);
+  };
 
   const getFilteredMovies = (movies, { text = "", shortFilms = false }) => {
     return movies.filter((item) => {
       if (shortFilms && item.duration > SHORT_MOVIE_MINUTES) {
         return false;
       }
-      for (let key in item) {
-        if (
-          item.hasOwnProperty(key) &&
-          typeof item[key] === "string" &&
-          item[key].toLowerCase().includes(text.toLowerCase())
-        ) {
-          return true;
-        }
+      if (
+        item.hasOwnProperty("nameRU") &&
+        typeof item["nameRU"] === "string" &&
+        item["nameRU"].toLowerCase().includes(text.toLowerCase())
+      ) {
+        return true;
       }
       return false;
     });
@@ -99,14 +132,40 @@ function App() {
     });
   };
 
-  const fetchMovies = () => {
-    moviesApi.getMovies().then((res) => {
-      localStorage.setItem("movies", JSON.stringify(res));
+  const handleChangeFilters2 = ({ key, value }) => {
+    setFilters((prev) => {
+      handleFilterAllMovies({ ...prev, [key]: value });
+      return { ...prev, [key]: value };
     });
   };
 
-  const handleChangeProfile = (name, email)=>{
-  }
+  const handleSaveMovieCard = (card) => {
+    return mainApi.addCard(card).then((data) => {
+      getSavedMovies();
+      return data;
+    });
+  };
+
+  const handleDeleteMovieCard = (cardId) => {
+    return mainApi.deleteCard(cardId).then((data) => {
+      getSavedMovies();
+      return data;
+    });
+  };
+
+  const fetchMovies = () => {
+    moviesApi.getMovies().then((res) => {
+      localStorage.setItem("movies", JSON.stringify(res));
+      setLoading(false);
+    });
+  };
+
+  const handleChangeProfile = (name, email) => {
+    return mainApi.setUserInfo({ name, email }).then((data) => {
+      changeCurrentUser(data);
+      return data;
+    });
+  };
 
   const handleOnRegister = (name, email, password) => {
     return register(name, email, password).then((data) => {
@@ -118,17 +177,18 @@ function App() {
               setIsLoggedIn(true);
             }
           })
-          .catch((error) => {
-          });
+          .catch((error) => {});
       }
     });
   };
 
   const handleOnLogin = (email, password) => {
+    setLoading(true);
     return authorize(email, password).then((data) => {
       if (data) {
         localStorage.setItem("jwt", data.token);
         setIsLoggedIn(true);
+        setLoading(false);
       }
     });
   };
@@ -140,7 +200,8 @@ function App() {
 
   return (
     <div className="page">
-      {pagesConfig.headerInclude.includes(pathname) ? (
+      {isLoading && <Preloader />}
+      {pagesConfig.partsInclude.includes(pathname) ? (
         <Header loggedIn={isLoggedIn} />
       ) : null}
       <Switch>
@@ -152,16 +213,24 @@ function App() {
           path="/movies"
           loggedIn={isLoggedIn}
           component={Movies}
+          onSaveMovieCard={handleSaveMovieCard}
+          onDeleteMovieCard={handleDeleteMovieCard}
           onChangeFilters={handleChangeFilters}
-          data={movies}
+          filters={filters}
+          dataList={movies}
+          getSavedMovieStatus={getSavedMovieStatus}
         />
         <ProtectedRoute
           exact
           path="/saved-movies"
           loggedIn={isLoggedIn}
           component={SavedMovies}
-          onChangeFilters={handleChangeFilters}
-          data={movies}
+          onSaveMovieCard={handleSaveMovieCard}
+          onDeleteMovieCard={handleDeleteMovieCard}
+          onChangeFilters={handleChangeFilters2}
+          filters={filters}
+          dataList={movies}
+          getSavedMovieStatus={getSavedMovieStatus}
         />
         <ProtectedRoute
           exact
@@ -182,7 +251,7 @@ function App() {
           <Error />
         </Route>
       </Switch>
-      {pagesConfig.footerInclude.includes(pathname) ? <Footer /> : null}
+      {pagesConfig.partsInclude.includes(pathname) ? <Footer /> : null}
     </div>
   );
 }

@@ -1,5 +1,5 @@
-import React from 'react';
-import './NavTab.css';
+import React from "react";
+import "./NavTab.css";
 
 const NavTab = () => (
   <nav className="nav-tab">

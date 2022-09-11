@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 
 const useCurrentWidth = () => {
-    const [width, setWidth] = useState(window.innerWidth);
-   useEffect (() => {
+  const [width, setWidth] = useState(window.innerWidth);
+  useEffect(() => {
     let timeoutId = null;
 
     const resizeListener = () => {
@@ -10,13 +10,13 @@ const useCurrentWidth = () => {
       timeoutId = setTimeout(() => setWidth(window.innerWidth, 150));
     };
 
-    window.addEventListener('resize', resizeListener);
+    window.addEventListener("resize", resizeListener);
 
     return () => {
-      window.removeEventListener('resize', resizeListener);
-    }
-  }, []); 
-   return width;
+      window.removeEventListener("resize", resizeListener);
+    };
+  }, []);
+  return width;
 };
 
 export default useCurrentWidth;
