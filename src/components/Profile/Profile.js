@@ -1,13 +1,17 @@
-import React from "react";
+import React, {useState} from "react";
 import { Link } from "react-router-dom";
 import "./Profile.css";
+
+import {useCurrentUser} from "../../contexts/CurrentUser";
 
 const Profile = (props) => {
   const { loggedOut, onChangeProfile } = props;
 
-  const [email, setEmail] = React.useState("");
-  const [name, setName] = React.useState("");
-  const [globalError, setGlobalError] = React.useState("");
+  const { user } = useCurrentUser();
+
+  const [email, setEmail] = useState(user.email);
+  const [name, setName] = useState(user.name);
+  const [globalError, setGlobalError] = useState("");
 
   const handleChangeName = (e) => {
     setName(e.target.value);
@@ -18,7 +22,10 @@ const Profile = (props) => {
   };
 
   const handleSubmit = () => {
-    onChangeProfile(name, email);
+    onChangeProfile(name, email)
+    .catch((error)=>{
+      setGlobalError("Что то пошло не так...");
+    });
   };
 
   const logout = () => {
@@ -28,7 +35,7 @@ const Profile = (props) => {
   return (
     <section className="profile">
       <div className="profile__container">
-        <h3 className="profile__greeting">Привет, {name}!</h3>
+        <h3 className="profile__greeting">Привет, {user.name}!</h3>
         <form className="profile__form">
           <div className="profile_form-input">
             <p className="profile__text">Имя</p>

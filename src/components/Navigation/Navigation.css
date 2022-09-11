@@ -74,6 +74,10 @@
   transition: opacity .2s linear;
 }
 
+.navigation__link_active {
+  font-weight: 400;
+}
+
 .navigation__link:hover {
   opacity: .6;
   cursor: pointer;
@@ -155,6 +159,10 @@
     font-size: 18px;
     line-height: 22px;
     text-decoration: none;
+  }
+
+  .navigation__link_active {
+    font-weight: 400;
   }
 
   .navigation__link:hover {
